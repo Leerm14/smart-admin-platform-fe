@@ -1,0 +1,435 @@
+
+@primary: #4f46e5;
+@text: #0f172a;
+@text-body: #334155;
+@muted: #64748b;
+@muted-light: #94a3b8;
+@border: #e2e8f0;
+@border-light: #f1f5f9;
+@bg: #f8fafc;
+@danger: #ef4444;
+@indigo-bg: #eef2ff;
+@grad: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+
+.profilePage {
+	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.layoutRow {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+
+	@media (max-width: 991px) {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
+
+.profileCard {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	align-items: center;
+	flex-shrink: 0;
+	width: 380px;
+	padding: 28px;
+	background: #fff;
+	border: 1px solid @border-light;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px -2px #4f46e51a;
+
+	@media (max-width: 991px) {
+		width: 100%;
+	}
+}
+
+.avatarWrapper {
+	position: relative;
+	width: 92px;
+	height: 92px;
+
+	.avatar {
+		width: 88px;
+		height: 88px;
+		background: @grad;
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 88px;
+	}
+
+	.avatarOverlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 88px;
+		height: 88px;
+		background: rgba(15, 23, 42, 0.45);
+		border-radius: 50%;
+	}
+
+	.editAvatarBtn {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 30px;
+		height: 30px;
+		background: #fff;
+		border: 2px solid @border-light;
+		border-radius: 50%;
+		box-shadow: 0 2px 6px #0f172a1f;
+		color: @muted;
+		font-size: 14px;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+
+		&:hover {
+			color: @primary;
+			border-color: #c7d2fe;
+		}
+	}
+}
+
+.userName {
+	font-size: 18px;
+	font-weight: 800;
+	letter-spacing: -0.3px;
+	color: @text;
+}
+
+.userEmail {
+	margin-top: -12px;
+	font-size: 12.5px;
+	color: @muted;
+}
+
+.roleBadge {
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 10px;
+	border-radius: 999px;
+	font-size: 11px;
+	font-weight: 700;
+
+	&.admin {
+		background: #f5f3ff;
+		color: #7c3aed;
+	}
+
+	&.manager {
+		background: #eff6ff;
+		color: #2563eb;
+	}
+
+	&.hr {
+		background: #fdf2f8;
+		color: #db2777;
+	}
+
+	&.user {
+		background: @border-light;
+		color: #475569;
+	}
+}
+
+.divider {
+	width: 100%;
+	height: 1px;
+	background: @border-light;
+}
+
+.profileFields {
+	width: 100%;
+
+	:global {
+		.ant-form-item {
+			margin-bottom: 14px;
+		}
+
+		.ant-form-item-label {
+			padding-bottom: 4px;
+
+			> label {
+				font-family: inherit;
+				font-size: 13px;
+				font-weight: 600;
+				color: @text-body;
+			}
+		}
+
+		.ant-input {
+			height: 40px;
+			border-radius: 8px;
+			border-color: @border;
+			font-family: inherit;
+			font-size: 14px;
+		}
+	}
+}
+
+.btnRow {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+	margin-top: 4px;
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.btnSecondary {
+		display: inline-flex;
+		gap: 8px;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+		padding: 10px 16px;
+		border: 1px solid @border;
+		border-radius: 8px;
+		background: #fff;
+		color: @text-body;
+		font-family: inherit;
+		font-size: 13.5px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+
+		:global(.anticon) {
+			color: @muted;
+			font-size: 15px;
+		}
+
+		&:hover {
+			border-color: #c7d2fe;
+			color: @primary;
+		}
+	}
+
+	.btnPrimary {
+		flex: 1;
+		height: auto !important;
+		padding: 10px 16px !important;
+		border: none !important;
+		border-radius: 8px !important;
+		background: @grad !important;
+		color: #fff !important;
+		font-family: inherit !important;
+		font-size: 13.5px !important;
+		font-weight: 600 !important;
+		box-shadow: 0 4px 14px #4f46e54d;
+	}
+}
+
+.userMgmtCard {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	background: #fff;
+	border: 1px solid @border-light;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px -2px #4f46e51a;
+}
+
+.mgmtHeader {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	padding: 16px 20px;
+	border-bottom: 1px solid @border-light;
+
+	h2 {
+		margin: 0;
+		font-size: 14.5px;
+		font-weight: 700;
+		color: @text;
+	}
+}
+
+.mgmtActions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	@media (max-width: 576px) {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.roleFilter {
+		@media (max-width: 576px) {
+			width: 100%;
+		}
+
+		:global(.ant-select) {
+			@media (max-width: 576px) {
+				width: 100% !important;
+			}
+		}
+
+		:global(.ant-select-selector) {
+			border-radius: 8px !important;
+			border-color: @border !important;
+			font-family: inherit;
+			font-size: 12.5px;
+		}
+	}
+}
+
+.addUserBtn {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	height: auto !important;
+	padding: 8px 14px !important;
+	border: none !important;
+	border-radius: 8px !important;
+	background: @grad !important;
+	font-family: inherit !important;
+	font-size: 12.5px !important;
+	font-weight: 600 !important;
+	box-shadow: 0 4px 14px #4f46e54d;
+
+	@media (max-width: 576px) {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+.usersTableWrapper {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+
+	:global {
+		.ant-table {
+			font-family: inherit;
+			min-width: 800px;
+		}
+
+		.ant-table-thead > tr > th {
+			padding: 11px 20px;
+			background: @bg;
+			border-bottom: none;
+			color: @muted-light;
+			font-size: 10.5px;
+			font-weight: 700;
+			letter-spacing: 0.6px;
+			text-transform: uppercase;
+
+			&::before {
+				display: none;
+			}
+		}
+
+		.ant-table-tbody > tr > td {
+			padding: 12px 20px;
+			border-bottom: 1px solid @border-light;
+		}
+
+		.ant-table-tbody > tr:hover > td {
+			background: #fafbff;
+		}
+
+		.ant-pagination {
+			padding: 0 16px 16px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+
+			.ant-pagination-item,
+			.ant-pagination-prev .ant-pagination-item-link,
+			.ant-pagination-next .ant-pagination-item-link {
+				border-radius: 8px;
+			}
+
+			.ant-pagination-item-active {
+				border: none;
+				background: @grad;
+
+				a {
+					color: #fff;
+					font-weight: 700;
+				}
+			}
+		}
+	}
+}
+
+.emailCell {
+	font-size: 13px;
+	font-weight: 500;
+	color: @text-body;
+}
+
+.nameCell {
+	font-size: 13px;
+	color: @muted;
+}
+
+.statusCell {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	font-size: 12px;
+
+	.dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+
+		&.online {
+			background: #10b981;
+		}
+
+		&.offline {
+			background: #cbd5e1;
+		}
+	}
+}
+
+.actionBtns {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	.actionBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		padding: 0;
+		border: none;
+		border-radius: 6px;
+		background: transparent;
+		font-size: 15px;
+		cursor: pointer;
+		transition: background 0.15s ease-out;
+
+		&:hover {
+			background: @border-light;
+		}
+
+		&.editBtn {
+			color: @primary;
+		}
+
+		&.roleBtn {
+			color: @muted;
+		}
+
+		&.deleteBtn {
+			color: @danger;
+		}
+	}
+}

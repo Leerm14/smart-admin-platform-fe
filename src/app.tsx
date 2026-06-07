@@ -1,5 +1,10 @@
 import Footer from '@/components/Footer';
+import HeaderBreadcrumb from '@/components/HeaderBreadcrumb';
+import PendingBadge from '@/components/MenuBadges/PendingBadge';
+import MenuUnreadBadge from '@/components/NotificationBell/MenuUnreadBadge';
+import MobileSidebarToggle from '@/components/MobileSidebarToggle';
 import RightContent from '@/components/RightContent';
+import { ThunderboltFilled } from '@ant-design/icons';
 import { notification } from 'antd';
 import 'moment/locale/vi';
 import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
@@ -22,9 +27,47 @@ export const initialStateConfig = {
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
- * // Tobe removed
  * */
 export async function getInitialState(): Promise<IInitialState> {
+	const token = localStorage.getItem('token');
+	if (token) {
+		try {
+			const { getUserInfo } = await import('@/services/base/api');
+			const response = await getUserInfo();
+			const userData = response?.data?.data ?? response?.data;
+			return {
+				currentUser: userData,
+				permissionLoading: false,
+			};
+		} catch (error: any) {
+			// Access token expired — try refresh
+			if (error?.response?.status === 401) {
+				const refreshToken = localStorage.getItem('refreshToken');
+				if (refreshToken) {
+					try {
+						const axios = (await import('@/utils/axios')).default;
+						const { ip3 } = await import('@/utils/ip');
+						const refreshRes = await axios.post(`${ip3}/auth/refresh`, { refreshToken }, { headers: {} });
+						const refreshData = refreshRes?.data?.data ?? refreshRes?.data;
+						if (refreshData?.accessToken) {
+							localStorage.setItem('token', refreshData.accessToken);
+							if (refreshData.refreshToken) localStorage.setItem('refreshToken', refreshData.refreshToken);
+							const { getUserInfo } = await import('@/services/base/api');
+							const retryRes = await getUserInfo();
+							const userData = retryRes?.data?.data ?? retryRes?.data;
+							return {
+								currentUser: userData,
+								permissionLoading: false,
+							};
+						}
+					} catch {
+						// Refresh also failed — clear and redirect to login
+					}
+				}
+			}
+			localStorage.clear();
+		}
+	}
 	return {
 		permissionLoading: true,
 	};
@@ -64,7 +107,8 @@ export const request: RequestConfig = {
 };
 
 // ProLayout  https://procomponents.ant.design/components/layout
-export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }: any) => {
+	const sidebarCollapsed = initialState?.sidebarCollapsed ?? false;
 	return {
 		unAccessible: (
 			<TechnicalSupportBounder>
@@ -73,13 +117,50 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		),
 		noFound: <NotFoundContent />,
 		rightContentRender: () => <RightContent />,
+		headerContentRender: () => <HeaderBreadcrumb />,
 		disableContentMargin: false,
+		// Sync collapsed state với floating toggle button trên mobile
+		collapsed: sidebarCollapsed,
+		onCollapse: (c: boolean) => {
+			setInitialState((prev: any) => ({ ...prev, sidebarCollapsed: c }));
+		},
 
-		footerRender: () => <Footer />,
+		// các trang workspace toàn màn (builder) không có footer
+		footerRender: () => {
+			const { pathname } = window.location;
+			const isWorkspace =
+				pathname.startsWith('/forms/builder') ||
+				pathname.startsWith('/workflows/builder') ||
+				/^\/(forms|workflows)\/[^/]+\/edit/.test(pathname);
+			return isWorkspace ? null : <Footer />;
+		},
 
 		onPageChange: () => {
+			const { pathname } = window.location;
+			// Public paths that don't require authentication
+			const publicPaths = [
+				'/user/login',
+				'/user',
+				'/',
+				'/403',
+				'/404',
+				'/hold-on',
+				'/contact',
+				'/privacy',
+				'/terms',
+				'/pricing',
+				'/security',
+			];
+			const isPublicPath = publicPaths.some((p) => pathname === p || pathname.startsWith('/user/'));
+
+			// Redirect to login if not authenticated and accessing a protected route
+			if (!initialState?.currentUser && !isPublicPath) {
+				history.replace('/user/login');
+				return;
+			}
+
 			if (initialState?.currentUser) {
-				const isUncheckPath = ['/notification/subscribe'].some((path) => window.location.pathname.includes(path));
+				const isUncheckPath = ['/notification/subscribe'].some((path) => pathname.includes(path));
 				if (
 					!isUncheckPath &&
 					currentRole &&
@@ -102,7 +183,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				}}
 				style={{ display: 'block' }}
 			>
-				{dom}
+				{item?.path === '/notifications' || item?.path === '/submissions/pending' ? (
+					<span className='ds-menu-item-with-badge'>
+						{dom}
+						{item?.path === '/notifications' ? <MenuUnreadBadge /> : <PendingBadge />}
+					</span>
+				) : (
+					dom
+				)}
 			</a>
 		),
 
@@ -111,9 +199,24 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				{/* <TechnicalSupportBounder> */}
 				<OneSignalBounder>{dom}</OneSignalBounder>
 				{/* </TechnicalSupportBounder> */}
+				{/* Nút hamburger floating — chỉ hiện trên mobile, fixed góc dưới trái */}
+				<MobileSidebarToggle />
 			</ErrorBoundary>
 		),
-		menuHeaderRender: undefined,
+		menuHeaderRender: () => (
+			<a
+				className='ds-menu-header'
+				onClick={(e) => {
+					e.preventDefault();
+					history.push('/dashboard');
+				}}
+			>
+				<span className='ds-logo-square'>
+					<ThunderboltFilled />
+				</span>
+				<span className='ds-logo-text'>FLOWFORM</span>
+			</a>
+		),
 		...initialState?.settings,
 	};
 };

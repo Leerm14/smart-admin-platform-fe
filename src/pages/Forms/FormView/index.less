@@ -1,0 +1,619 @@
+// design: Corporate Trust (smartadmin.pen) — trang xem chi tiết biểu mẫu
+
+@primary: #4f46e5;
+@text: #0f172a;
+@text-body: #334155;
+@muted: #64748b;
+@muted-light: #94a3b8;
+@border: #e2e8f0;
+@border-light: #f1f5f9;
+@bg: #f8fafc;
+@success: #10b981;
+@success-dark: #047857;
+@success-bg: #ecfdf5;
+@danger: #ef4444;
+@indigo-bg: #eef2ff;
+@violet-bg: #f5f3ff;
+@warning-bg: #fffbeb;
+@warning: #f59e0b;
+@grad: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+@card-shadow: 0 4px 20px -2px #4f46e51a;
+
+.formViewPage {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-height: 100vh;
+	padding: 24px;
+	background: @bg;
+	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+	@media (max-width: 768px) {
+		padding: 16px;
+		gap: 14px;
+	}
+
+	@media (max-width: 480px) {
+		padding: 12px;
+		gap: 12px;
+	}
+}
+
+.card() {
+	background: #fff;
+	border: 1px solid @border-light;
+	border-radius: 12px;
+	box-shadow: @card-shadow;
+}
+
+// Trạng thái tải / lỗi
+.loadingWrapper,
+.errorWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	min-height: 60vh;
+	color: @muted;
+	font-size: 13px;
+}
+
+.errorIcon {
+	font-size: 36px;
+	color: @danger;
+}
+
+.retryBtn {
+	padding: 9px 18px;
+	border: none;
+	border-radius: 8px;
+	background: @grad;
+	color: #fff;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 4px 14px #4f46e54d;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		transform: translateY(-1px);
+	}
+}
+
+// Header
+.viewHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+
+	@media (max-width: 640px) {
+		flex-wrap: wrap;
+	}
+}
+
+.headerLeft {
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	min-width: 0;
+}
+
+.backBtn {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-shrink: 0;
+	padding: 8px 14px;
+	border: 1px solid @border;
+	border-radius: 8px;
+	background: #fff;
+	color: @text-body;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	@media (max-width: 480px) {
+		padding: 7px 11px;
+		font-size: 12px;
+	}
+
+	&:hover {
+		border-color: #c7d2fe;
+		color: @primary;
+	}
+}
+
+.headerInfo {
+	min-width: 0;
+}
+
+.formName {
+	margin: 0 0 2px;
+	font-size: 20px;
+	font-weight: 800;
+	letter-spacing: -0.4px;
+	color: @text;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	@media (max-width: 480px) {
+		font-size: 16px;
+	}
+}
+
+.formMeta {
+	font-size: 12.5px;
+	color: @muted;
+}
+
+.editBtn {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 10px 18px;
+	border: none;
+	border-radius: 8px;
+	background: @grad;
+	color: #fff;
+	font-family: inherit;
+	font-size: 13.5px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 4px 14px #4f46e54d;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 10px 25px -5px #4f46e566;
+	}
+}
+
+.viewContent {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+// Card thông tin nhanh
+.infoCard {
+	.card();
+
+	padding: 20px 24px;
+}
+
+.infoGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+
+	@media (max-width: 900px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: 480px) {
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+}
+
+.infoItem {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.infoLabel {
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
+	color: @muted-light;
+}
+
+.infoValue {
+	font-size: 13.5px;
+	font-weight: 600;
+	color: @text-body;
+}
+
+.statusBadge {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	padding: 4px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+
+	.dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+	}
+
+	&.active {
+		background: @success-bg;
+		color: @success-dark;
+
+		.dot {
+			background: @success;
+		}
+	}
+
+	&.inactive {
+		background: @border-light;
+		color: @muted;
+
+		.dot {
+			background: @muted-light;
+		}
+	}
+}
+
+// Mô tả + cài đặt
+.descriptionCard,
+.settingsCard {
+	.card();
+
+	padding: 20px 24px;
+}
+
+.sectionTitle {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-bottom: 12px;
+	font-size: 15px;
+	font-weight: 700;
+	color: @text;
+
+	.icon {
+		color: @primary;
+		font-size: 16px;
+	}
+}
+
+.descriptionText {
+	margin: 0;
+	font-size: 13.5px;
+	line-height: 1.6;
+	color: @text-body;
+}
+
+// Bản xem trước biểu mẫu (giấy)
+.formPreviewCard {
+	.card();
+
+	align-self: center;
+	width: 620px;
+	max-width: 100%;
+	padding: 24px;
+	box-shadow: 0 8px 30px -4px #4f46e521;
+}
+
+.formPreviewHeader {
+	padding-bottom: 12px;
+	margin-bottom: 16px;
+	border-bottom: 1px solid @border-light;
+}
+
+.formTitle {
+	margin: 0 0 4px;
+	font-size: 18px;
+	font-weight: 800;
+	letter-spacing: -0.3px;
+	color: @text;
+}
+
+.formDesc {
+	margin: 0;
+	font-size: 12.5px;
+	line-height: 1.5;
+	color: @muted;
+}
+
+.fieldsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.fieldItem {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 14px;
+	border: 1px solid @border;
+	border-radius: 10px;
+	background: #fff;
+}
+
+.fieldHeader {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.fieldTypeIcon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	border-radius: 8px;
+	font-size: 13px;
+
+	&.text {
+		background: @indigo-bg;
+		color: @primary;
+	}
+
+	&.number {
+		background: #ecfeff;
+		color: #0891b2;
+	}
+
+	&.date {
+		background: @warning-bg;
+		color: @warning;
+	}
+
+	&.select {
+		background: @violet-bg;
+		color: #7c3aed;
+	}
+}
+
+.fieldLabel {
+	flex: 1;
+	font-size: 13px;
+	font-weight: 600;
+	color: @text-body;
+}
+
+.requiredMark {
+	margin-left: 3px;
+	color: @danger;
+}
+
+.fieldTypeBadge {
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: @border-light;
+	color: @muted;
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: 0.4px;
+}
+
+.fieldInputPreview {
+	display: flex;
+	align-items: center;
+	height: 36px;
+	padding: 0 12px;
+	border: 1px solid @border-light;
+	border-radius: 8px;
+	background: @bg;
+	color: @muted-light;
+	font-size: 13px;
+}
+
+.selectOptions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.optionItem {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	padding: 4px 10px;
+	border: 1px solid @border;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 500;
+	color: @text-body;
+}
+
+.optionDot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: @primary;
+}
+
+.fieldRules {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.ruleTag {
+	padding: 3px 8px;
+	border-radius: 6px;
+	background: @indigo-bg;
+	color: @primary;
+	font-size: 11px;
+	font-weight: 500;
+
+	strong {
+		font-weight: 700;
+	}
+}
+
+.emptyFields {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 32px 0;
+	color: @muted-light;
+	font-size: 13px;
+
+	.emptyIcon {
+		font-size: 32px;
+		color: #cbd5e1;
+	}
+}
+
+// Danh sách cài đặt
+.settingsList {
+	display: flex;
+	flex-direction: column;
+}
+
+.settingItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 0;
+	border-bottom: 1px solid @border-light;
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.settingKey {
+	font-size: 13px;
+	font-weight: 500;
+	color: @text-body;
+}
+
+.settingValue {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: @muted;
+
+	&.true {
+		color: @success-dark;
+	}
+
+	&.false {
+		color: @muted-light;
+	}
+}
+
+// ==========================================
+// THEMES FOR FORM PREVIEW CARD
+// ==========================================
+
+.themeDark {
+	background: #0f172a;
+	border-color: #1e293b;
+
+	.formTitle { color: #f8fafc; }
+	.formDesc { color: #94a3b8; }
+	
+	.fieldItem { border-color: #334155; }
+	.fieldLabel { color: #f1f5f9; }
+	.requiredMark { color: #ef4444; }
+	
+	.fieldInputPreview {
+		background: #1e293b;
+		border-color: #334155;
+		color: #cbd5e1;
+	}
+
+	.optionItem {
+		border-color: #334155;
+		color: #cbd5e1;
+	}
+	
+	.ruleTag {
+		background: #1e293b;
+		color: #94a3b8;
+	}
+}
+
+.themeMint {
+	background: #ecfdf5;
+	border-color: #d1fae5;
+
+	.formTitle { color: #064e3b; }
+	.formDesc { color: #047857; }
+	
+	.fieldItem { border-color: #a7f3d0; }
+	.fieldLabel { color: #064e3b; }
+	.requiredMark { color: #dc2626; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #a7f3d0;
+		color: #064e3b;
+	}
+
+	.optionItem {
+		border-color: #a7f3d0;
+		color: #064e3b;
+	}
+
+	.ruleTag {
+		background: #d1fae5;
+		color: #047857;
+	}
+}
+
+.themeSunset {
+	background: #fff1f2;
+	border-color: #ffe4e6;
+
+	.formTitle { color: #881337; }
+	.formDesc { color: #9f1239; }
+	
+	.fieldItem { border-color: #fecdd3; }
+	.fieldLabel { color: #881337; }
+	.requiredMark { color: #b91c1c; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #fecdd3;
+		color: #881337;
+	}
+
+	.optionItem {
+		border-color: #fecdd3;
+		color: #881337;
+	}
+
+	.ruleTag {
+		background: #ffe4e6;
+		color: #9f1239;
+	}
+}
+
+.themeViolet {
+	background: #f5f3ff;
+	border-color: #ede9fe;
+
+	.formTitle { color: #4c1d95; }
+	.formDesc { color: #5b21b6; }
+	
+	.fieldItem { border-color: #ddd6fe; }
+	.fieldLabel { color: #4c1d95; }
+	.requiredMark { color: #dc2626; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #ddd6fe;
+		color: #4c1d95;
+	}
+
+	.optionItem {
+		border-color: #ddd6fe;
+		color: #4c1d95;
+	}
+
+	.ruleTag {
+		background: #ede9fe;
+		color: #5b21b6;
+	}
+}

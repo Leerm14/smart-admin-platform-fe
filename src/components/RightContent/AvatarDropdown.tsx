@@ -1,5 +1,6 @@
 import { landingUrl } from '@/services/base/constant';
-import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { logoutApi } from '@/services/base/api';
+import { DownOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
@@ -12,11 +13,16 @@ export type GlobalHeaderRightProps = {
 };
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
-	const { initialState } = useModel('@@initialState');
+	const { initialState, setInitialState } = useModel('@@initialState');
 
-	const loginOut = () => {
+	const loginOut = async () => {
+		const refreshToken = localStorage.getItem('refreshToken');
+		if (refreshToken) {
+			try { await logoutApi(refreshToken); } catch { /* best effort */ }
+		}
 		localStorage.clear();
 		sessionStorage.clear();
+		await setInitialState((s: any) => ({ ...s, currentUser: undefined }));
 		history.replace('/user/login');
 	};
 
@@ -30,35 +36,31 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const fullName = initialState.currentUser?.family_name
 		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
 		: initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || '');
-	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
+	const initials =
+		fullName
+			.split(' ')
+			.filter(Boolean)
+			.slice(-2)
+			.map((w: string) => w[0]?.toUpperCase())
+			.join('') || 'U';
+
+	const ROLE_LABELS: Record<string, string> = {
+		ADMIN: 'Quản trị viên',
+		MANAGER: 'Quản lý',
+		HR: 'Nhân sự',
+		USER: 'Nhân viên',
+	};
+	const roleLabel = ROLE_LABELS[initialState.currentUser?.role] ?? '';
 
 	const items: ItemType[] = [
 		{
-			key: 'name',
+			key: 'profile',
 			icon: <UserOutlined />,
-			label: fullName,
+			label: 'Hồ sơ cá nhân',
+			onClick: () => window.location.href = '/profile',
 		},
-		// {
-		// 	key: 'password',
-		// 	icon: <SwapOutlined />,
-		// 	label: 'Đổi mật khẩu',
-		// 	onClick: () => {
 		// 		const redirect = window.location.href;
 		// 		window.location.href = `${keycloakAuthEndpoint}?client_id=${AppModules[currentRole].clientId}&redirect_uri=${redirect}&response_type=code&scope=openid&kc_action=UPDATE_PASSWORD`;
-		// 	},
-		// },
-		{
-			key: 'office',
-			icon: <FileWordOutlined />,
-			label: 'Office 365',
-			onClick: () => window.open('https://office.com/'),
-		},
-		{
-			key: 'portal',
-			icon: <GlobalOutlined />,
-			label: APP_CONFIG_TITLE_LANDING ?? 'Cổng thông tin',
-			onClick: () => window.open(landingUrl),
-		},
 		{ type: 'divider', key: 'divider' },
 		{
 			key: 'logout',
@@ -70,25 +72,23 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	];
 
 	if (menu && !initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-		// items.splice(1, 0, {
-		//   key: 'center',
-		//   icon: <UserOutlined />,
-		//   label: 'Trang cá nhân',
 		//   onClick: () => history.push('/account/center'),
-		// });
 	}
 
 	return (
 		<>
 			<HeaderDropdown overlay={<Menu className={styles.menu} items={items} />}>
 				<span className={`${styles.action} ${styles.account}`}>
-					<Avatar
-						className={styles.avatar}
-						src={initialState.currentUser?.picture ? <img src={initialState.currentUser?.picture} /> : undefined}
-						icon={!initialState.currentUser?.picture ? lastNameChar ?? <UserOutlined /> : undefined}
-						alt='avatar'
-					/>
-					<span className={`${styles.name}`}>{fullName}</span>
+					{initialState.currentUser?.picture ? (
+						<Avatar className={styles.avatar} src={<img src={initialState.currentUser?.picture} alt='avatar' />} />
+					) : (
+						<span className={styles.gradAvatar}>{initials}</span>
+					)}
+					<span className={styles.userCol}>
+						<span className={styles.name}>{fullName}</span>
+						{roleLabel && <span className={styles.role}>{roleLabel}</span>}
+					</span>
+					<DownOutlined className={styles.caret} />
 				</span>
 			</HeaderDropdown>
 		</>

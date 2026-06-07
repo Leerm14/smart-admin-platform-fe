@@ -1,0 +1,536 @@
+// design: smartadmin.pen · frame 07 (Workflow Builder) & 07b (Workflow Edit)
+
+@primary: #4f46e5;
+@secondary: #7c3aed;
+@text: #0f172a;
+@text-body: #334155;
+@muted: #64748b;
+@muted-light: #94a3b8;
+@border: #e2e8f0;
+@border-light: #f1f5f9;
+@bg: #f8fafc;
+@danger: #ef4444;
+@indigo-bg: #eef2ff;
+@violet-bg: #f5f3ff;
+@grad: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+
+.builderPage {
+	display: flex;
+	flex-direction: column;
+	// nằm trong content: 100vh - topbar 60 - gutter 18×2; không margin âm
+	height: calc(100vh - 96px);
+	min-height: 480px;
+	overflow: hidden;
+	background: @bg;
+	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+	@media (max-width: 768px) {
+		height: auto; // Bỏ chiều cao cố định để scroll tự do trên mobile
+		min-height: calc(100vh - 96px);
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+.loadingWrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+}
+
+// Top bar — 60px
+.topBar {
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	flex-shrink: 0;
+	height: 60px;
+	padding: 0 24px;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 10px 10px 0 0;
+
+	@media (max-width: 768px) {
+		padding: 0 20px;
+		gap: 10px;
+	}
+
+	@media (max-width: 640px) {
+		padding: 0 16px;
+		gap: 8px;
+	}
+}
+
+.backBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 34px;
+	height: 34px;
+	border: none;
+	border-radius: 8px;
+	background: @border-light;
+	color: @muted;
+	font-size: 15px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		background: @border;
+		color: @text;
+	}
+}
+
+.titleCol {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	min-width: 0;
+}
+
+.titleRow {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.title {
+	font-size: 15px;
+	font-weight: 700;
+	color: @text;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.editBadge {
+	flex-shrink: 0;
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: @indigo-bg;
+	color: @primary;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 1px;
+
+	@media (max-width: 480px) {
+		display: none;
+	}
+}
+
+.subTitle {
+	font-size: 11.5px;
+	color: @muted-light;
+
+	@media (max-width: 640px) {
+		display: none;
+	}
+}
+
+.topSpacer {
+	flex: 1;
+}
+
+.viewBtn {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px 14px;
+	border: 1px solid @border;
+	border-radius: 8px;
+	background: #fff;
+	color: @text-body;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	:global(.anticon) {
+		color: @muted;
+	}
+
+	// Desktop: hiện text
+	.btnText { display: inline; }
+
+	// Mobile: ẩn text, chỉ hiện icon
+	@media (max-width: 640px) {
+		padding: 8px 10px;
+		.btnText { display: none; }
+	}
+
+	&:hover {
+		border-color: #c7d2fe;
+		color: @primary;
+	}
+}
+
+.saveBtn {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 8px;
+	background: @grad;
+	color: #fff;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 4px 14px #4f46e54d;
+	transition: all 0.2s ease-out;
+
+	// Desktop: hiện text dài, ẩn text ngắn
+	.btnText { display: inline; }
+	.btnTextShort { display: none; }
+
+	// Mobile: ẩn text dài, hiện text ngắn
+	@media (max-width: 480px) {
+		padding: 8px 12px;
+		font-size: 13px;
+
+		.btnText { display: none; }
+		.btnTextShort { display: inline; }
+	}
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 8px 20px -4px #4f46e566;
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}
+
+// Body — panel 500 | preview
+.body {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+	border: 1px solid @border;
+	border-top: none;
+	border-radius: 0 0 10px 10px;
+	overflow: hidden;
+
+	@media (max-width: 768px) {
+		flex-direction: column;
+		overflow: visible; // Để content có thể cuộn chung
+	}
+}
+
+.stagePanel {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	flex-shrink: 0;
+	width: 500px;
+	padding: 20px;
+	background: #fff;
+	border-right: 1px solid @border;
+	overflow-y: auto;
+
+	@media (max-width: 1100px) {
+		width: 420px;
+	}
+
+	@media (max-width: 768px) {
+		width: 100%;
+		border-right: none;
+		border-bottom: 1px solid @border;
+		padding: 16px;
+	}
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	label {
+		font-size: 13px;
+		font-weight: 600;
+		color: @text-body;
+	}
+
+	:global {
+		.ant-input,
+		.ant-select-selector,
+		.ant-input-number {
+			border-radius: 8px !important;
+			border-color: @border;
+			font-size: 13.5px;
+		}
+	}
+}
+
+.required {
+	color: @danger;
+}
+
+.divider {
+	height: 1px;
+	background: @border-light;
+}
+
+.sectionLabel {
+	color: @muted-light;
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+// Stage card
+.stageCard {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 14px;
+	border: 1px solid @border;
+	border-radius: 12px;
+	background: #fff;
+	transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+
+	&:hover,
+	&:focus-within {
+		border: 1.5px solid @primary;
+		box-shadow: 0 4px 16px -2px #4f46e526;
+	}
+}
+
+.stageHeader {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.stageBadge {
+	flex-shrink: 0;
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: @indigo-bg;
+	color: @primary;
+	font-size: 11px;
+	font-weight: 700;
+
+	&.violet {
+		background: @violet-bg;
+		color: @secondary;
+	}
+}
+
+.stageName {
+	font-size: 13px;
+	font-weight: 600;
+	color: @text-body;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.stageSpacer {
+	flex: 1;
+}
+
+.stageAction {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	color: @muted-light;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.15s ease-out;
+
+	&:hover {
+		background: @border-light;
+		color: @primary;
+	}
+
+	&:disabled {
+		opacity: 0.35;
+		pointer-events: none;
+	}
+
+	&.danger {
+		color: @danger;
+
+		&:hover {
+			background: #fef2f2;
+		}
+	}
+}
+
+.typeRow {
+	display: flex;
+	gap: 6px;
+}
+
+.typePill {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	padding: 6px 12px;
+	border: 1px solid @border;
+	border-radius: 999px;
+	background: #fff;
+	color: @muted;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		border-color: #c7d2fe;
+	}
+
+	&.active {
+		border-color: @primary;
+		background: @indigo-bg;
+		color: @primary;
+	}
+}
+
+.stageField {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	label {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: @text-body;
+	}
+}
+
+.fieldHint {
+	margin: 4px 0 0;
+	font-size: 11.5px;
+	color: @muted-light;
+}
+
+.thresholdRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+.permGrid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.permChip {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	padding: 5px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+
+	&.fixed {
+		background: @border-light;
+		color: @muted;
+	}
+}
+
+.permCheck {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	padding: 4px 10px;
+	border: 1px solid @border;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 500;
+	color: @text-body;
+	cursor: pointer;
+	transition: border-color 0.2s ease-out;
+
+	&:hover {
+		border-color: #c7d2fe;
+	}
+}
+
+.addRow {
+	display: flex;
+	gap: 8px;
+}
+
+.addBtn {
+	flex: 1;
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	justify-content: center;
+	padding: 11px 8px;
+	border: 1.5px dashed @primary;
+	border-radius: 10px;
+	background: @indigo-bg;
+	color: @primary;
+	font-family: inherit;
+	font-size: 12.5px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		background: #e0e7ff;
+	}
+}
+
+// Preview pane
+.previewPane {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	background: @bg;
+
+	@media (max-width: 768px) {
+		min-height: 400px;
+		flex: none; // Tránh bị thu hẹp trên mobile
+	}
+}
+
+.previewHeader {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-shrink: 0;
+	padding: 12px 20px;
+	background: #fff;
+	border-bottom: 1px solid @border-light;
+	font-size: 13px;
+	font-weight: 700;
+	color: @text;
+
+	:global(.anticon) {
+		color: @primary;
+	}
+}
+
+.previewBody {
+	flex: 1;
+	min-height: 0;
+	padding: 16px;
+	overflow: auto;
+}
+
+.emptyPreview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: @muted-light;
+	font-size: 13px;
+}

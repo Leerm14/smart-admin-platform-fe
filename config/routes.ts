@@ -1,5 +1,3 @@
-import component from "@/locales/en-US/component";
-
 export default [
 	{
 		path: '/user',
@@ -12,6 +10,24 @@ export default [
 				component: './user/Login',
 			},
 			{
+				path: '/user/register',
+				layout: false,
+				name: 'register-tenant',
+				component: './user/RegisterTenant',
+			},
+			{
+				path: '/user/forgot-password',
+				layout: false,
+				name: 'forgot-password',
+				component: './user/ForgotPassword',
+			},
+			{
+				path: '/user/reset-password',
+				layout: false,
+				name: 'reset-password',
+				component: './user/ResetPassword',
+			},
+			{
 				path: '/user',
 				redirect: '/user/login',
 			},
@@ -19,17 +35,21 @@ export default [
 	},
 
 	///////////////////////////////////
-	// DEFAULT MENU
+	// ADMIN + MANAGER ONLY
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
 		component: './Dashboard',
 		icon: 'HomeOutlined',
+		access: 'canManage',
 	},
+
+	// Forms Management — ADMIN + MANAGER only
 	{
 		path: '/forms',
-		name: 'Forms',
+		name: 'Quản lý biểu mẫu',
 		icon: 'FormOutlined',
+		access: 'canManage',
 		routes: [
 			{
 				path: '/forms',
@@ -40,20 +60,31 @@ export default [
 				path: '/forms/builder',
 				name: 'Form Builder',
 				hideInMenu: true,
+				layout: false,
 				component: './Forms/Builder',
 			},
 			{
-				path: '/forms/:formId',
-				name: 'Fill Form',
+				path: '/forms/:formId/edit',
+				name: 'Form Edit',
 				hideInMenu: true,
-				component: './Forms/FormDetail',
+				layout: false,
+				component: './Forms/FormEdit',
+			},
+			{
+				path: '/forms/:formId',
+				name: 'Form View',
+				hideInMenu: true,
+				component: './Forms/FormView',
 			},
 		],
 	},
+
+	// Workflows Management — ADMIN + MANAGER only (CRUD)
 	{
 		path: '/workflows',
-		name: 'Workflows',
+		name: 'Quy trình',
 		icon: 'PartitionOutlined',
+		access: 'canApprove',
 		routes: [
 			{
 				path: '/workflows',
@@ -64,26 +95,80 @@ export default [
 				path: '/workflows/builder',
 				name: 'Workflow Builder',
 				hideInMenu: true,
+				access: 'canManage',
 				component: './Workflows/Builder',
+			},
+			{
+				path: '/workflows/:id/edit',
+				name: 'Workflow Edit',
+				hideInMenu: true,
+				access: 'canManage',
+				component: './Workflows/WorkflowEdit',
+			},
+			{
+				path: '/workflows/:id',
+				name: 'Workflow Detail',
+				hideInMenu: true,
+				component: './Workflows/WorkflowDetail',
 			},
 		],
 	},
+
+	// Delegation — ADMIN + MANAGER + HR
+	{
+		path: '/delegations',
+		name: 'Ủy quyền',
+		icon: 'SwapOutlined',
+		access: 'canApprove',
+		component: './Delegations',
+	},
+
+	///////////////////////////////////
+	// ALL ROLES
+	// Submissions
 	{
 		path: '/submissions',
-		name: 'Submissions',
+		name: 'Yêu cầu',
 		icon: 'FileDoneOutlined',
-		hideInMenu: true,
 		routes: [
 			{
+				path: '/submissions',
+				component: './Submissions/RedirectByRole',
+				hideInMenu: true,
+			},
+			{
+				path: '/submissions/new/:formId',
+				name: 'Điền biểu mẫu',
+				hideInMenu: true,
+				component: './Submissions/FillForm',
+			},
+			{
+				path: '/submissions/new',
+				name: 'Nộp biểu mẫu',
+				component: './Submissions/FormSubmit',
+			},
+			{
+				path: '/submissions/mine',
+				name: 'Yêu cầu của tôi',
+				component: './Submissions/MySubmissions',
+			},
+			{
+				path: '/submissions/pending',
+				name: 'Chờ phê duyệt',
+				access: 'canApprove',
+				component: './Submissions/PendingApprovals',
+			},
+			{
 				path: '/submissions/:id',
-				name: 'Submission Detail',
+				name: 'Chi tiết',
+				hideInMenu: true,
 				component: './Submissions/Detail',
 			},
 		],
 	},
 	{
 		path: '/notifications',
-		name: 'Notifications',
+		name: 'Thông báo',
 		icon: 'BellOutlined',
 		component: './Notifications',
 	},
@@ -100,6 +185,31 @@ export default [
 		layout: false,
 	},
 	{
+		path: '/contact',
+		component: './Contact',
+		layout: false,
+	},
+	{
+		path: '/privacy',
+		component: './Privacy',
+		layout: false,
+	},
+	{
+		path: '/terms',
+		component: './Terms',
+		layout: false,
+	},
+	{
+		path: '/pricing',
+		component: './Pricing',
+		layout: false,
+	},
+	{
+		path: '/security',
+		component: './Security',
+		layout: false,
+	},
+	{
 		path: '/403',
 		component: './exception/403/403Page',
 		layout: false,
@@ -107,6 +217,11 @@ export default [
 	{
 		path: '/hold-on',
 		component: './exception/DangCapNhat',
+		layout: false,
+	},
+	{
+		path: '/404',
+		component: './exception/404/404Page',
 		layout: false,
 	},
 	{

@@ -1,0 +1,939 @@
+// design: smartadmin.pen · frame 05 (Form Builder) & 05b (Form Edit)
+
+@primary: #4f46e5;
+@text: #0f172a;
+@text-body: #334155;
+@muted: #64748b;
+@muted-light: #94a3b8;
+@border: #e2e8f0;
+@border-light: #f1f5f9;
+@bg: #f8fafc;
+@danger: #ef4444;
+@indigo-bg: #eef2ff;
+@grad: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+
+.builderLayout {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 60px);
+	min-height: 480px;
+	overflow: hidden;
+	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+	background: @bg;
+
+	@media (max-width: 575px) {
+		margin: -12px;
+	}
+}
+
+// Top bar — 60px
+.header {
+	display: flex;
+	flex-shrink: 0;
+	gap: 14px;
+	align-items: center;
+	height: 60px;
+	margin-top: 10px; // Thêm khoảng cách phía trên
+	padding: 0 24px; // tăng từ 20 → 24
+	background: #fff;
+	border-bottom: 1px solid @border;
+
+	@media (max-width: 768px) {
+		padding: 0 20px;
+		gap: 10px;
+	}
+
+	@media (max-width: 640px) {
+		padding: 0 16px; // tăng từ 12 → 16
+		gap: 8px;
+	}
+}
+
+.btnBack {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	color: @muted;
+	font-size: 15px;
+	background: @border-light;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		color: @text;
+		background: @border;
+	}
+}
+
+.titleCol {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	min-width: 0;
+}
+
+.titleRow {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+
+	.titleIcon {
+		color: @muted-light;
+		font-size: 12px;
+	}
+}
+
+.nameInput {
+	min-width: 60px;
+	max-width: 360px;
+	height: 22px;
+	padding: 0;
+	color: @text;
+	font-weight: 700;
+	font-size: 15px;
+	font-family: inherit;
+	line-height: 22px;
+	background: transparent;
+	border: none;
+	outline: none;
+
+	// Giới hạn chiều rộng tên biểu mẫu trên mobile
+	@media (max-width: 640px) {
+		max-width: 120px;
+	}
+
+	@media (max-width: 480px) {
+		max-width: 90px;
+		font-size: 13px;
+	}
+
+	&::placeholder {
+		color: @muted-light;
+	}
+}
+
+.descInput {
+	width: 360px;
+	height: 17px;
+	padding: 0;
+	color: @muted-light;
+	font-size: 11.5px;
+	font-family: inherit;
+	line-height: 17px;
+	background: transparent;
+	border: none;
+	outline: none;
+
+	// Ẩn mô tả trên màn nhỏ — tiết kiệm chiều rộng header
+	@media (max-width: 640px) {
+		display: none;
+	}
+}
+
+.editBadge {
+	flex-shrink: 0;
+	padding: 3px 10px;
+	color: @primary;
+	font-weight: 700;
+	font-size: 10px;
+	letter-spacing: 1px;
+	background: @indigo-bg;
+	border-radius: 999px;
+
+	// Ẩn trên mobile nhỏ — bảo toàn không gian header
+	@media (max-width: 480px) {
+		display: none;
+	}
+}
+
+.headerSpacer {
+	flex: 1;
+}
+
+.btnPreview {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px 14px;
+	color: @text-body;
+	font-weight: 600;
+	font-size: 13px;
+	font-family: inherit;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	:global(.anticon) {
+		color: @muted;
+		font-size: 15px;
+	}
+
+	// Desktop: hiện text
+	.btnText { display: inline; }
+
+	// Mobile: ẩn text, chỉ hiện icon
+	@media (max-width: 640px) {
+		padding: 8px 10px;
+		.btnText { display: none; }
+	}
+
+	&:hover {
+		color: @primary;
+		border-color: #c7d2fe;
+	}
+}
+
+.btnSave {
+	padding: 10px 20px;
+	color: #fff;
+	font-weight: 600;
+	font-size: 14px;
+	font-family: inherit;
+	background: @grad;
+	border: none;
+	border-radius: 8px;
+	box-shadow: 0 4px 14px #4f46e54d;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	// Desktop: hiện text dài, ẩn text ngắn
+	.btnText { display: inline; }
+	.btnTextShort { display: none; }
+
+	// Mobile: ẩn text dài, hiện text ngắn
+	@media (max-width: 480px) {
+		padding: 8px 12px;
+		font-size: 13px;
+
+		.btnText { display: none; }
+		.btnTextShort { display: inline; }
+	}
+
+	&:hover {
+		box-shadow: 0 8px 20px -4px #4f46e566;
+		transform: translateY(-1px);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}
+
+// Body — toolbox 240 | canvas | panel 300
+.mainContent {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+
+	// Mobile: stack vertically — toolbox → strip nằm ngang trên
+	@media (max-width: 768px) {
+		flex-direction: column;
+		overflow: hidden;
+	}
+}
+
+.toolbox {
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	gap: 12px;
+	width: 240px;
+	padding: 16px;
+	overflow-y: auto;
+	background: #fff;
+	border-right: 1px solid @border;
+
+	// Mobile: thanh ngang scroll à top
+	@media (max-width: 768px) {
+		width: 100%;
+		flex-direction: row;
+		gap: 8px;
+		padding: 10px 16px; // tăng từ 12 → 16 — không sát viền
+		overflow-x: auto;
+		overflow-y: hidden;
+		border-right: none;
+		border-bottom: 1px solid @border;
+		-webkit-overflow-scrolling: touch;
+		flex-shrink: 0;
+		> span:first-child {
+			display: none;
+		}
+	}
+}
+
+.sectionLabel {
+	color: @muted-light;
+	font-weight: 700;
+	font-size: 10.5px;
+	letter-spacing: 1px;
+}
+
+.tileList {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	// Mobile: items xếp ngang trong toolbox strip
+	@media (max-width: 768px) {
+		flex-direction: row;
+		gap: 8px;
+	}
+}
+
+.tile {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	padding: 12px 14px;
+	background: @bg;
+	border: 1px solid @border;
+	border-radius: 10px;
+	cursor: grab;
+	transition: all 0.2s ease-out;
+
+	.tileIcon {
+		color: @primary;
+		font-size: 15px;
+	}
+
+	.tileLabel {
+		flex: 1;
+		color: @text-body;
+		font-weight: 600;
+		font-size: 13px;
+	}
+
+	.tileGrip {
+		color: #cbd5e1;
+		font-size: 13px;
+	}
+
+	&:hover {
+		border-color: #c7d2fe;
+		box-shadow: 0 2px 8px #4f46e51f;
+	}
+
+	&.dragging {
+		border-color: @primary;
+		box-shadow: 0 8px 20px -4px #4f46e54d;
+		opacity: 0.95;
+	}
+
+	// Mobile strip: compact, icon + label dọc
+	@media (max-width: 768px) {
+		flex-direction: column;
+		gap: 4px;
+		padding: 8px 10px;
+		min-width: 64px;
+		align-items: center;
+		flex-shrink: 0;
+
+		.tileLabel {
+			font-size: 11px;
+			text-align: center;
+			flex: unset;
+		}
+
+		.tileGrip {
+			display: none;
+		}
+	}
+}
+
+.canvasArea {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	min-width: 0;
+	padding: 24px;
+	overflow-y: auto;
+
+	@media (max-width: 768px) {
+		padding: 16px; // padding đều 4 phía
+		min-height: 0;
+	}
+}
+
+.paper {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 620px;
+	max-width: 100%;
+	padding: 24px;
+	background: #fff;
+	border: 1px solid @border-light;
+	border-radius: 12px;
+	box-shadow: 0 8px 30px -4px #4f46e521;
+}
+
+.formHead {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid @border-light;
+
+	h2 {
+		margin: 0;
+		color: @text;
+		font-weight: 800;
+		font-size: 18px;
+		letter-spacing: -0.3px;
+	}
+
+	p {
+		margin: 0;
+		color: @muted;
+		font-size: 12.5px;
+		line-height: 1.5;
+	}
+}
+
+.fieldCard {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 14px;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 10px;
+	cursor: grab;
+	transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+
+	&:hover {
+		border-color: #c7d2fe;
+	}
+
+	&.active {
+		border-color: @primary;
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+	}
+
+	&.dragging {
+		box-shadow: 0 14px 30px -6px #4f46e54d;
+	}
+}
+
+.fieldRow {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+
+	.fieldLabel {
+		color: @text-body;
+		font-weight: 600;
+		font-size: 13px;
+	}
+
+	.requiredMark {
+		color: @danger;
+		font-weight: 600;
+		font-size: 13px;
+	}
+
+	.rowSpacer {
+		flex: 1;
+	}
+
+	.fieldAction {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		color: @muted-light;
+		font-size: 13px;
+		background: transparent;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		transition: all 0.15s ease-out;
+
+		&:hover {
+			color: @primary;
+			background: @border-light;
+		}
+
+		&.danger {
+			color: @danger;
+
+			&:hover {
+				background: #fef2f2;
+			}
+		}
+	}
+}
+
+.fieldInputPreview {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: space-between;
+	height: 36px;
+	padding: 0 12px;
+	color: @muted-light;
+	font-size: 13px;
+	background: @bg;
+	border: 1px solid @border-light;
+	border-radius: 8px;
+
+	&.active {
+		border-color: @primary;
+	}
+}
+
+.selectPreviewContainer {
+	position: relative;
+}
+
+.customDropdownOptions {
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 0;
+	left: 0;
+	z-index: 5;
+	padding: 6px;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 8px;
+	box-shadow: 0 10px 25px -5px #0f172a26;
+}
+
+.customOptionItem {
+	padding: 7px 10px;
+	color: @text-body;
+	font-size: 13px;
+	border-radius: 6px;
+	cursor: default;
+
+	&:hover {
+		color: @primary;
+		background: @indigo-bg;
+	}
+}
+
+.customOptionEmpty {
+	padding: 7px 10px;
+	color: @muted-light;
+	font-size: 12.5px;
+}
+
+.dropGhost {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	color: @primary;
+	font-weight: 600;
+	font-size: 13px;
+	background: @indigo-bg;
+	border: 1.5px dashed @primary;
+	border-radius: 10px;
+	transition: all 0.2s ease-out;
+
+	:global(.anticon) {
+		font-size: 17px;
+	}
+
+	&.over {
+		background: #e0e7ff;
+		box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+	}
+}
+
+// Right panel — 300, tabs
+.propPanel {
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	width: 300px;
+	overflow-y: auto;
+	background: #fff;
+	border-left: 1px solid @border;
+
+	// Mobile: panel dưới bottom — chiều cao cố định
+	@media (max-width: 768px) {
+		width: 100%;
+		height: 280px; // tăng thêm 20px — nội dung thông thoáng hơn
+		border-left: none;
+		border-top: 1px solid @border;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+.tabs {
+	display: flex;
+	flex-shrink: 0;
+	border-bottom: 1px solid @border-light;
+}
+
+.tab {
+	flex: 1;
+	padding: 12px 0;
+	color: @muted;
+	font-weight: 600;
+	font-size: 12.5px;
+	font-family: inherit;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+	transition: color 0.2s ease-out;
+
+	&:hover {
+		color: @text-body;
+	}
+
+	&.active {
+		color: @primary;
+		font-weight: 700;
+		border-bottom-color: @primary;
+	}
+}
+
+.panelBody {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 16px;
+}
+
+.themeGrid {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.themeRow {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	padding: 10px 12px;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	.swatch {
+		flex-shrink: 0;
+		width: 22px;
+		height: 22px;
+		border: 1px solid @border;
+		border-radius: 50%;
+	}
+
+	.themeName {
+		flex: 1;
+		color: @text-body;
+		font-weight: 600;
+		font-size: 13px;
+	}
+
+	.themeCheck {
+		color: @primary;
+		font-size: 15px;
+	}
+
+	&:hover {
+		border-color: #c7d2fe;
+	}
+
+	&.active {
+		background: @indigo-bg;
+		border: 1.5px solid @primary;
+
+		.themeName {
+			color: @text;
+		}
+	}
+}
+
+.panelDivider {
+	height: 1px;
+	margin: 4px 0;
+	background: @border-light;
+}
+
+.checkRow {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	cursor: pointer;
+
+	.checkBox {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		width: 18px;
+		height: 18px;
+		color: #fff;
+		font-size: 11px;
+		background: #fff;
+		border: 1.5px solid @border;
+		border-radius: 5px;
+		transition: all 0.15s ease-out;
+
+		&.checked {
+			background: @primary;
+			border-color: @primary;
+		}
+	}
+
+	.checkLabel {
+		color: @text-body;
+		font-weight: 500;
+		font-size: 13px;
+	}
+}
+
+// Field config (tab Thành phần)
+.propGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	label {
+		color: @text-body;
+		font-weight: 600;
+		font-size: 12.5px;
+	}
+}
+
+.propInput {
+	height: 36px;
+	padding: 0 12px;
+	color: @text;
+	font-size: 13px;
+	font-family: inherit;
+	background: #fff;
+	border: 1px solid @border;
+	border-radius: 8px;
+	outline: none;
+	transition: all 0.2s ease-out;
+
+	&:focus {
+		border-color: @primary;
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+	}
+}
+
+select.propInput {
+	cursor: pointer;
+}
+
+.optionsList {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.optionItem {
+	display: flex;
+	gap: 6px;
+
+	input {
+		.propInput();
+
+		flex: 1;
+		min-width: 0;
+		height: 32px;
+	}
+
+	button {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		color: @danger;
+		background: #fff;
+		border: 1px solid @border;
+		border-radius: 8px;
+		cursor: pointer;
+
+		&:hover {
+			background: #fef2f2;
+			border-color: @danger;
+		}
+	}
+}
+
+.btnAddOption {
+	padding: 8px;
+	color: @primary;
+	font-weight: 600;
+	font-size: 12.5px;
+	font-family: inherit;
+	background: transparent;
+	border: 1px dashed @border;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		background: @indigo-bg;
+		border-color: @primary;
+	}
+}
+
+.btnDeleteField {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: center;
+	margin-top: 6px;
+	padding: 9px;
+	color: @danger;
+	font-weight: 600;
+	font-size: 12.5px;
+	font-family: inherit;
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		background: #fee2e2;
+	}
+}
+
+.emptyProps {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 40px 16px;
+	color: @muted-light;
+	font-size: 13px;
+	text-align: center;
+
+	:global(.anticon) {
+		margin-bottom: 12px;
+		font-size: 36px;
+		opacity: 0.5;
+	}
+}
+
+// ==========================================
+// THEMES FOR FORM BUILDER CANVAS
+// ==========================================
+
+.themeDark {
+	background: #0f172a;
+	border-color: #1e293b;
+
+	.formHead h2 { color: #f8fafc; }
+	.formHead p { color: #94a3b8; }
+	
+	.fieldCard {
+		background: #0f172a;
+		border-color: #334155;
+		&:hover { border-color: #64748b; }
+		&.active { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+	}
+	
+	.fieldLabel { color: #f1f5f9; }
+	.fieldHint { color: #64748b; }
+	.requiredMark { color: #ef4444; }
+	
+	.fieldInputPreview {
+		background: #1e293b;
+		border-color: #334155;
+		color: #cbd5e1;
+		&.active { border-color: #8b5cf6; }
+	}
+}
+
+.themeMint {
+	background: #ecfdf5;
+	border-color: #d1fae5;
+
+	.formHead h2 { color: #064e3b; }
+	.formHead p { color: #047857; }
+	
+	.fieldCard {
+		background: #ecfdf5;
+		border-color: #a7f3d0;
+		&:hover { border-color: #34d399; }
+		&.active { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
+	}
+	
+	.fieldLabel { color: #064e3b; }
+	.fieldHint { color: #059669; }
+	.requiredMark { color: #dc2626; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #a7f3d0;
+		color: #064e3b;
+		&.active { border-color: #10b981; }
+	}
+}
+
+.themeSunset {
+	background: #fff1f2;
+	border-color: #ffe4e6;
+
+	.formHead h2 { color: #881337; }
+	.formHead p { color: #9f1239; }
+	
+	.fieldCard {
+		background: #fff1f2;
+		border-color: #fecdd3;
+		&:hover { border-color: #fb7185; }
+		&.active { border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2); }
+	}
+	
+	.fieldLabel { color: #881337; }
+	.fieldHint { color: #e11d48; }
+	.requiredMark { color: #b91c1c; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #fecdd3;
+		color: #881337;
+		&.active { border-color: #f43f5e; }
+	}
+}
+
+.themeViolet {
+	background: #f5f3ff;
+	border-color: #ede9fe;
+
+	.formHead h2 { color: #4c1d95; }
+	.formHead p { color: #5b21b6; }
+	
+	.fieldCard {
+		background: #f5f3ff;
+		border-color: #ddd6fe;
+		&:hover { border-color: #a78bfa; }
+		&.active { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+	}
+	
+	.fieldLabel { color: #4c1d95; }
+	.fieldHint { color: #7c3aed; }
+	.requiredMark { color: #dc2626; }
+	
+	.fieldInputPreview {
+		background: #fff;
+		border-color: #ddd6fe;
+		color: #4c1d95;
+		&.active { border-color: #8b5cf6; }
+	}
+}

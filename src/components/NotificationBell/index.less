@@ -1,0 +1,286 @@
+
+@primary: #4f46e5;
+@text: #0f172a;
+@text-body: #334155;
+@muted: #64748b;
+@muted-light: #94a3b8;
+@border-light: #f1f5f9;
+@bg: #f8fafc;
+@success: #10b981;
+@success-bg: #ecfdf5;
+@warning: #f59e0b;
+@warning-bg: #fffbeb;
+@danger: #ef4444;
+@danger-bg: #fef2f2;
+@indigo-bg: #eef2ff;
+
+.bellWrapper {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.bellButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	border: none;
+	border-radius: 10px;
+	background: @border-light;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	&:hover {
+		background: @indigo-bg;
+
+		.bellIcon {
+			color: @primary;
+		}
+	}
+}
+
+.bellIcon {
+	color: @muted;
+	font-size: 18px;
+	transition: color 0.2s ease-out;
+}
+
+.dropdown {
+	position: absolute;
+	z-index: 1050;
+	top: calc(100% + 10px);
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	width: 380px;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 12px 40px #0f172a1f;
+	overflow: hidden;
+	animation: dropIn 0.2s ease-out both;
+}
+
+@keyframes dropIn {
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.dropdownHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 20px 12px;
+	border-bottom: 1px solid @border-light;
+}
+
+.headerTitle {
+	font-size: 15px;
+	font-weight: 700;
+	line-height: 1.25;
+	color: @text;
+}
+
+.markAllBtn {
+	display: inline-flex;
+	gap: 4px;
+	align-items: center;
+	border: none;
+	background: transparent;
+	color: @primary;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.25;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.dropdownBody {
+	max-height: 380px;
+	overflow-y: auto;
+}
+
+.loadingState {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 36px 20px;
+	color: @muted-light;
+	font-size: 13px;
+}
+
+.emptyState {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 40px 20px;
+}
+
+.emptyIcon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	margin-bottom: 6px;
+	border-radius: 50%;
+	background: @indigo-bg;
+	color: @primary;
+	font-size: 22px;
+}
+
+.emptyTitle {
+	font-size: 13.5px;
+	font-weight: 700;
+	color: @text-body;
+}
+
+.emptySub {
+	margin: 0;
+	font-size: 12px;
+	color: @muted-light;
+}
+
+.notifItem {
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+	padding: 14px 18px;
+	border-bottom: 1px solid @border-light;
+	cursor: pointer;
+	transition: background 0.2s ease-out;
+
+	&:hover {
+		background: @bg;
+	}
+
+	&.unread {
+		background: #fafbff;
+		box-shadow: inset 3px 0 0 @primary;
+
+		.notifTitle {
+			color: @text;
+		}
+	}
+}
+
+.notifIcon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	font-size: 17px;
+
+	&.typeSUCCESS {
+		background: @success-bg;
+		color: @success;
+	}
+
+	&.typeWARNING {
+		background: @warning-bg;
+		color: @warning;
+	}
+
+	&.typeERROR {
+		background: @danger-bg;
+		color: @danger;
+	}
+
+	&.typeINFO {
+		background: @indigo-bg;
+		color: @primary;
+	}
+}
+
+.notifContent {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	flex: 1;
+	min-width: 0;
+}
+
+.notifTitle {
+	font-size: 13.5px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: @text-body;
+}
+
+.notifMessage {
+	display: -webkit-box;
+	overflow: hidden;
+	font-size: 12.5px;
+	line-height: 1.5;
+	color: @muted;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.notifTime {
+	display: inline-flex;
+	gap: 4px;
+	align-items: center;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.2;
+	color: #cbd5e1;
+}
+
+.unreadDot {
+	flex-shrink: 0;
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	margin-top: 6px;
+	border: none;
+	border-radius: 50%;
+	background: @primary;
+	cursor: pointer;
+
+	&:hover {
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+	}
+}
+
+.dropdownFooter {
+	padding: 10px 0;
+	border: none;
+	border-top: 1px solid @border-light;
+	background: #fff;
+	color: @primary;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.25;
+	text-align: center;
+	cursor: pointer;
+	transition: background 0.2s ease-out;
+
+	&:hover {
+		background: @bg;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dropdown {
+		animation: none !important;
+	}
+}
