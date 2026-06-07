@@ -531,11 +531,17 @@ const FormBuilder: React.FC<IFormBuilderProps> = ({ editId: editIdProp }) => {
 				<div className={styles.headerSpacer} />
 				{editId && (
 					<button type='button' className={styles.btnPreview} onClick={() => history.push(`/forms/${editId}`)}>
-						<EyeOutlined /> Xem biểu mẫu
+						<EyeOutlined />
+						<span className={styles.btnText}>Xem biểu mẫu</span>
 					</button>
 				)}
 				<button type='button' className={styles.btnSave} onClick={handleSave} disabled={isSaving || isLoading}>
-					{isSaving ? 'Đang lưu...' : editId ? 'Cập nhật biểu mẫu' : 'Lưu biểu mẫu'}
+					<span className={styles.btnText}>
+						{isSaving ? 'Đang lưu...' : editId ? 'Cập nhật biểu mẫu' : 'Lưu biểu mẫu'}
+					</span>
+					<span className={styles.btnTextShort}>
+						{isSaving ? '...' : 'Lưu'}
+					</span>
 				</button>
 			</header>
 
@@ -670,17 +676,21 @@ const FormBuilder: React.FC<IFormBuilderProps> = ({ editId: editIdProp }) => {
 						{rightTab === 'theme' && (
 							<div className={styles.panelBody}>
 								<span className={styles.sectionLabel}>CHỦ ĐỀ BIỂU MẪU</span>
-								{THEME_PRESETS.map((preset) => (
-									<div
-										key={preset.id}
-										className={`${styles.themeRow} ${themePreset === preset.id ? styles.active : ''}`}
-										onClick={() => setThemePreset(preset.id)}
-									>
-										<span className={styles.swatch} style={{ background: preset.swatch }} />
-										<span className={styles.themeName}>{preset.label}</span>
-										{themePreset === preset.id && <CheckCircleOutlined className={styles.themeCheck} />}
-									</div>
-								))}
+								<div className={styles.themeGrid}>
+									{THEME_PRESETS.map((preset) => (
+										<div
+											key={preset.id}
+											className={`${styles.themeRow} ${themePreset === preset.id ? styles.active : ''}`}
+											onClick={() => setThemePreset(preset.id)}
+										>
+											<div className={styles.swatch} style={{ background: preset.swatch }} />
+											<span className={styles.themeName}>{preset.label}</span>
+											{themePreset === preset.id && (
+												<CheckCircleOutlined className={styles.themeCheck} />
+											)}
+										</div>
+									))}
+								</div>
 							</div>
 						)}
 

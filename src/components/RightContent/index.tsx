@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModel } from 'umi';
 import AvatarDropdown from './AvatarDropdown';
-import NotificationBell from '@/components/NotificationBell';
+import NotificationBell from '../NotificationBell';
 import styles from './index.less';
 
 export type SiderTheme = 'light' | 'dark';
@@ -15,8 +15,10 @@ const GlobalHeaderRight: React.FC = () => {
 
 	return (
 		<div className={styles.right}>
-			<NotificationBell />
-			<span className={styles.divider} />
+			<div className={styles.desktopOnly}>
+				<NotificationBell />
+			</div>
+			<div className={styles.divider} />
 			<AvatarDropdown menu />
 		</div>
 	);
