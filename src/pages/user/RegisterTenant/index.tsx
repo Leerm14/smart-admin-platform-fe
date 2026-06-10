@@ -111,6 +111,15 @@ const RegisterTenant: React.FC = () => {
 					</div>
 
 					<div className={styles.formPanel}>
+						<div className={styles.mobileLogo}>
+							<Link to='/' className={styles.lpLogoMobile} title='Về trang chủ'>
+								<div className={styles.lpLogoSq}>
+									<ThunderboltFilled />
+								</div>
+								<span>FLOWFORM</span>
+							</Link>
+						</div>
+
 						<div className={styles.header}>
 							<h2>Đăng ký tổ chức</h2>
 							<p>Tạo tenant mới và tài khoản quản trị viên trong một bước</p>
