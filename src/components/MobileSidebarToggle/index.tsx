@@ -11,6 +11,11 @@ const MobileSidebarToggle: React.FC = () => {
 	const { initialState, setInitialState } = useModel('@@initialState');
 	const collapsed = (initialState as any)?.sidebarCollapsed ?? true;
 
+	const { pathname } = window.location;
+	const isPublicPath = ['/', '/user', '/403', '/404', '/hold-on', '/contact', '/privacy', '/terms', '/pricing', '/security'].some((p) => pathname === p || pathname.startsWith('/user/'));
+
+	if (isPublicPath) return null;
+
 	const toggle = () => {
 		setInitialState((prev: any) => ({ ...prev, sidebarCollapsed: !collapsed }));
 	};

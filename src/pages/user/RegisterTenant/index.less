@@ -20,7 +20,8 @@
 	justify-content: center;
 	min-height: 100vh;
 	background: @bg;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
 
 	&::before {
@@ -67,10 +68,14 @@
 	justify-content: center;
 	width: 100%;
 	padding: 24px;
+	box-sizing: border-box;
 }
 
 .cardWrap {
 	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .registerCard {
